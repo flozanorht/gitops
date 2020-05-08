@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  htpasswd: dGVzdHVzZXI6JDJ5JDA1JC9pOHQ2Tk9MaVBEdXlwRm80VlFldy5ydWRGdUYyYkYuNEx1enBrQ1RncVFvUnd1WEtpSnJlCg==
+kind: Secret
+metadata:
+  name: idp-localusers
+  namespace: openshift-config
+type: Opaque

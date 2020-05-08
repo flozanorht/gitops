@@ -1,0 +1,9 @@
+resources:
+- oauth.yaml
+secretGenerator:
+- name: idp-localusers
+  namespace: openshift-config
+  files:
+  - htpasswd=idp-localusers-data
+generatorOptions:
+  disableNameSuffixHash: true
