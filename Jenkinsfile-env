@@ -1,11 +1,12 @@
 pipeline {
-    agent any
+    agent none
     //agent {
       //node {
       //  label 'base'
       //}
     //}
     stages {
+        agent any
         stage ('host and context') {
             steps {
                 sh 'hostname'
