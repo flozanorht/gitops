@@ -11,10 +11,10 @@ pipeline {
                 sh 'hostname'
                 // give it time to check pod creation
                 sleep (60)
-                oc 'oc whoami'
-                oc 'oc whoami -t'
-                oc 'oc whoami -c'
-                oc 'oc get pod'
+                sh 'oc whoami'
+                sh 'oc whoami -t'
+                sh 'oc whoami -c'
+                sh 'oc get pod'
             }
         }
     }
