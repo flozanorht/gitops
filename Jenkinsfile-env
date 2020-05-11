@@ -6,8 +6,9 @@ pipeline {
       //}
     //}
     stages {
-        agent any
+        // can't specify an agent here
         stage ('host and context') {
+            agent any
             steps {
                 sh 'hostname'
                 // give it time to check pod creation
