@@ -10,11 +10,13 @@ pipeline {
             steps {
                 sh 'hostname'
                 // give it time to check pod creation
-                sleep (60)
+                sleep (30)
                 sh 'oc whoami'
                 sh 'oc whoami -t'
-                sh 'oc whoami -c'
+                sh 'oc whoami -c || oc project test-nobuild'
                 sh 'oc get pod'
+                // give it time to check pod creation
+                sleep (30)
             }
         }
     }
