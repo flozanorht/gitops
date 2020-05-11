@@ -1,14 +1,14 @@
 pipeline {
     agent none
-    //agent {
-      //node {
-      //  label 'base'
-      //}
-    //}
+    agent {
+      node {
+        label 'nodejs'
+      }
+    }
     stages {
         // can't specify an agent here
         stage ('host and context') {
-            agent any
+            //agent any
             steps {
                 sh 'hostname'
                 // give it time to check pod creation
