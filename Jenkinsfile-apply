@@ -8,13 +8,15 @@ pipeline {
     stages {
         stage ('Apply resources') {
             steps {
+                // fails when there is no change
                 sh 'cd config ; oc apply -k .'
             }
         }
         stage ('Verify test user') {
             steps {
                 // would this "corrupt" the context and prevent later steps/stages from working?
-                sh 'oc login testuser/redhat123'
+                //sh 'oc login -u testuser -p redhat123 https://api.ocp-flozano3.do280.dev.nextcle.com:644'
+                sh 'oc login -u testuser -p redhat123'
             }
         }
     }
