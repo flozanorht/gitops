@@ -1,0 +1,21 @@
+pipeline {
+    agent {
+      node {
+        // try later defining a pod template using the base agent image or creating an is for the base agent image
+        label 'nodejs'
+      }
+    }
+    stages {
+        stage ('Apply resources') {
+            steps {
+                sh 'cd config ; oc apply -k .'
+            }
+        }
+        stage ('Verify test user') {
+            steps {
+                // would this "corrupt" the context and prevent later steps/stages from working?
+                sh 'oc login testuser/redhat123'
+            }
+        }
+    }
+}
