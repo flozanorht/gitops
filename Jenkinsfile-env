@@ -2,8 +2,9 @@ pipeline {
     //agent none
     agent {
       node {
+        label 'maven'
         //label 'nodejs'
-        label 'base'
+        //label 'base'
       }
     }
     stages {
