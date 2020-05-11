@@ -1,9 +1,9 @@
 pipeline {
     agent {
-      node {
-        // spin up a node.js slave pod to run this build on
-        label 'base'
-      }
+      any
+      //node {
+      //  label 'base'
+      //}
     }
     stages {
         stage ('host and context') {
