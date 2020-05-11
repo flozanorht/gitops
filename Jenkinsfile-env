@@ -1,0 +1,19 @@
+pipeline {
+    agent {
+      node {
+        // spin up a node.js slave pod to run this build on
+        label 'base'
+      }
+    }
+    stages {
+        stage ('host and context') {
+            sh 'hostname'
+            // give it time to check pod creation
+            sleep (60)
+            oc 'oc whoami'
+            oc 'oc whoami -t'
+            oc 'oc whoami -c'
+            oc 'oc get pod'
+        }
+    }
+}
