@@ -2,7 +2,8 @@ pipeline {
     //agent none
     agent {
       node {
-        label 'nodejs'
+        //label 'nodejs'
+        label 'base'
       }
     }
     stages {
@@ -24,6 +25,7 @@ pipeline {
             steps {
                 sh 'date -R > testing.txt'
                 sh 'echo 123 >> testing.txt'
+                //good, don't need a shared folder to archive artifacts
                 archiveArtifacts artifacts: '*.txt'
             }
         }
