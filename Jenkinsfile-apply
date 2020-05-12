@@ -1,4 +1,8 @@
 pipeline {
+    triggers {
+        pollSCM ('H/5 * * * *')
+        //upstream (upstreamProjects: 'drift', threshold: hudson.model.Result.SUCCESS)
+    }
     agent {
       node {
         // try later defining a pod template using the base agent image or creating an is for the base agent image
@@ -14,8 +18,6 @@ pipeline {
         }
         stage ('Verify test user') {
             steps {
-                // would this "corrupt" the context and prevent later steps/stages from working?
-                //sh 'oc login -u testuser -p redhat123 https://api.ocp-flozano3.do280.dev.nextcle.com:644'
                 sh 'oc login -u testuser -p redhat123 --insecure-skip-tls-verify https://kubernetes.default.svc:443'
             }
         }
