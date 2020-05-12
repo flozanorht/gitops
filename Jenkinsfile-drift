@@ -8,15 +8,22 @@ pipeline {
     stages {
         stage ('Check resource drift') {
             steps {
-                // Need to invert the status. When there's a drift oc diff returns failure
-                sh '( oc diff -k config && echo "There is no drift" ) | tee drift-report.txt'
-                archiveArtifacts artifacts: '*.txt'
+                sh 'oc diff -k config | tee drift-report.txt'
             }
         }
         stage ('Trigger the apply pipeline') {
             steps {
-                sh 'true'
+                sh 'echo "DO NOT KNOW HOW TO TRIGGER THE NEXT PIPELINE"'
             }
+        }
+    }
+    post {
+        failure {
+            sh 'rm drift-report.txt'
+            sh 'echo "There is no configuration drift" > drift.txt'
+        }
+        always {
+            archiveArtifacts artifacts: '*.txt'
         }
     }
 }
