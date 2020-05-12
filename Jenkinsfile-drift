@@ -6,9 +6,9 @@ pipeline {
       }
     }
     stages {
-        stage ('Check resource drirt') {
+        stage ('Check resource drift') {
             steps {
-                sh 'oc diff -k config > drift-report.txt'
+                sh 'oc diff -k config > drift-report.txt && echo "No drift"'
                 archiveArtifacts artifacts: '*.txt', onlyIfSuccessful: true
             }
         }
