@@ -17,14 +17,14 @@ pipeline {
         }
         stage ('Trigger the apply pipeline') {
             steps {
-                sh 'echo "DO NOT KNOW HOW TO TRIGGER THE NEXT PIPELINE"'
+                build job: 'apply', wait: true
             }
         }
     }
     post {
         failure {
             sh 'rm drift-report.txt'
-            sh 'echo "There is no configuration drift" > no-drift.txt'
+            sh 'echo \'There is no configuration drift\' > no-drift.txt'
             archiveArtifacts artifacts: '*.txt'
         }
     }
