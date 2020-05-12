@@ -8,7 +8,8 @@ pipeline {
     stages {
         stage ('Check resource drift') {
             steps {
-                sh '! oc diff -k config | tee drift-report.txt'
+                // Need to invert the status. When there's a drift oc diff returns failure
+                sh '!(oc diff -k config | tee drift-report.txt)'
                 archiveArtifacts artifacts: '*.txt', onlyIfSuccessful: true
             }
         }
