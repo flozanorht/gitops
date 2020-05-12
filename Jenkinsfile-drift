@@ -1,0 +1,21 @@
+pipeline {
+    agent {
+      node {
+        // try later defining a pod template using the base agent image or creating an is for the base agent image
+        label 'nodejs'
+      }
+    }
+    stages {
+        stage ('Check resource drirt') {
+            steps {
+                sh 'oc diff -k config > drift-report.txt'
+                archiveArtifacts artifacts: '*.txt, onlyIfSuccessful: true
+            }
+        }
+        stage ('Trigger the apply pipeline') {
+            steps {
+                sh 'false'
+            }
+        }
+    }
+}
