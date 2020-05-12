@@ -1,0 +1,29 @@
+pipeline {
+    agent {
+      node {
+        // try later defining a pod template using the base agent image or creating an is for the base agent image
+        label 'nodejs'
+      }
+    }
+    stages {
+        stage ('Check resource drift') {
+            steps {
+                // tee eats up the exit status of the previous command
+                sh 'oc diff -k config | tee drift-report.txt'
+                // forces a failure if there a drift
+                sh '! test -s drift-report.txt'
+            }
+        }
+    }
+    post {
+        failure {
+            archiveArtifacts artifacts: '*.txt'
+            build job: 'apply', wait: true
+        }
+        success {
+            sh 'rm drift-report.txt'
+            sh 'echo \'There is no configuration drift\' > no-drift.txt'
+            archiveArtifacts artifacts: '*.txt'
+        }
+    }
+}
