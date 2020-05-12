@@ -8,8 +8,7 @@ pipeline {
     stages {
         stage ('Apply resources') {
             steps {
-                // Fails when there is no change. How to differentiate between 'did nothing' and 'cannot do'?
-                // Try a diff before? Use a when clause for the configs folder?
+                sh 'awk -F: '{ print $1 }' config/idp-localusers-data'
                 sh 'oc apply -k config'
             }
         }
