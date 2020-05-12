@@ -9,7 +9,7 @@ pipeline {
         stage ('Check resource drirt') {
             steps {
                 sh 'oc diff -k config > drift-report.txt'
-                archiveArtifacts artifacts: '*.txt, onlyIfSuccessful: true
+                archiveArtifacts artifacts: '*.txt', onlyIfSuccessful: true
             }
         }
         stage ('Trigger the apply pipeline') {
