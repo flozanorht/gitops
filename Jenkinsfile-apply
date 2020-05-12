@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage ('Apply resources') {
             steps {
-                sh 'awk -F: '{ print $1 }' config/idp-localusers-data'
+                sh 'awk -F: \'{ print $1 }\' config/idp-localusers-data'
                 sh 'oc apply -k config'
             }
         }
