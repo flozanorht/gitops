@@ -4,6 +4,7 @@ pipeline {
       node {
         label 'maven'
         //label 'nodejs'
+        // There is no predefined is for that image. Create a pod template?
         //label 'base'
       }
     }
