@@ -1,4 +1,7 @@
 pipeline {
+    triggers {
+        cron('H/5 * * * *')
+    }
     agent {
       node {
         // try later defining a pod template using the base agent image or creating an is for the base agent image
