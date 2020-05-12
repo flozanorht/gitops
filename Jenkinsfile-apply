@@ -10,13 +10,14 @@ pipeline {
             steps {
                 // Fails when there is no change. How to differentiate between 'did nothing' and 'cannot do'?
                 // Try a diff before? Use a when clause for the configs folder?
-                sh 'cd config ; oc apply -k .'
+                sh 'oc diff -k config || oc apply -k config'
             }
         }
         stage ('Verify test user') {
             steps {
                 // would this "corrupt" the context and prevent later steps/stages from working?
-                sh 'oc login -u testuser -p redhat123 https://api.ocp-flozano3.do280.dev.nextcle.com:644'
+                //sh 'oc login -u testuser -p redhat123 https://api.ocp-flozano3.do280.dev.nextcle.com:644'
+                sh 'oc login -u testuser -p redhat123 https://kubernetes.default.svc:443'
             }
         }
     }
