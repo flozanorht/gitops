@@ -1,8 +1,7 @@
 pipeline {
     triggers {
-        // Do I need to force the first build? Just reopen the configuration won't work.
+        // Do I need to force the first build? I know I do if I added that line after creating the item
         pollSCM ('H/5 * * * *')
-        //upstream (upstreamProjects: 'drift', threshold: hudson.model.Result.SUCCESS)
     }
     agent {
       node {
