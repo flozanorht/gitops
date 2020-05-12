@@ -1,5 +1,6 @@
 pipeline {
     triggers {
+        // Do I need to force the first build? Just reopen the configuration won't work.
         pollSCM ('H/5 * * * *')
         //upstream (upstreamProjects: 'drift', threshold: hudson.model.Result.SUCCESS)
     }
