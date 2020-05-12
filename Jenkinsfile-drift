@@ -12,6 +12,7 @@ pipeline {
                 sh 'oc diff -k config | tee drift-report.txt'
                 // forces a failure if there is no drift
                 sh 'test -s drift-report.txt'
+                archiveArtifacts artifacts: '*.txt' 
             }
         }
         stage ('Trigger the apply pipeline') {
@@ -24,8 +25,6 @@ pipeline {
         failure {
             sh 'rm drift-report.txt'
             sh 'echo "There is no configuration drift" > no-drift.txt'
-        }
-        always {
             archiveArtifacts artifacts: '*.txt'
         }
     }
