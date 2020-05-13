@@ -20,9 +20,7 @@ pipeline {
         }
         stage ('Trigger the apply pipeline') {
             steps {
-                // could force the master branch of a multibranch pipeline
-                //build job: 'apply/master'
-                build job: 'apply'
+                build job: 'apply/master'
             }
         }
     }

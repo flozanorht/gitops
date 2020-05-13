@@ -21,9 +21,7 @@ pipeline {
     post {
         failure {
             archiveArtifacts artifacts: '*.txt'
-            // could force the master branch of a multibranch pipeline
-            //build job: 'apply/master'
-            build job: 'apply'
+            build job: 'apply/master'
         }
         success {
             sh 'rm drift-report.txt'
