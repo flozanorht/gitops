@@ -21,7 +21,7 @@ pipeline {
     post {
         failure {
             archiveArtifacts artifacts: '*.txt'
-            build job: 'apply', wait: true
+            build job: 'apply/master', wait: true
         }
         success {
             sh 'rm drift-report.txt'
