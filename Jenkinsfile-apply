@@ -14,12 +14,18 @@ pipeline {
             }
         }
         stage ('Apply resources') {
+            when {
+                branch 'master'
+            }
             steps {
                 sh 'awk -F: \'{ print $1 }\' config/idp-localusers-data'
                 sh 'oc apply -k config'
             }
         }
         stage ('Verify test user') {
+            when {
+                branch 'master'
+            }
             steps {
                 sh 'oc login -u testuser -p redhat123 --insecure-skip-tls-verify https://kubernetes.default.svc:443'
                 sh 'oc new-project test-testuser || true'
