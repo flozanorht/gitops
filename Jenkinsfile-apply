@@ -1,15 +1,18 @@
 pipeline {
     triggers {
-        // Do I need to force the first build? I know I do if I added that line after creating the item
         pollSCM ('H/5 * * * *')
     }
     agent {
       node {
-        // try later defining a pod template using the base agent image or creating an is for the base agent image
         label 'nodejs'
       }
     }
     stages {
+        stage ('Validate resources') {
+            steps {
+                sh 'oc apply --dry-run -k config'
+            }
+        }
         stage ('Apply resources') {
             steps {
                 sh 'awk -F: \'{ print $1 }\' config/idp-localusers-data'
@@ -19,6 +22,7 @@ pipeline {
         stage ('Verify test user') {
             steps {
                 sh 'oc login -u testuser -p redhat123 --insecure-skip-tls-verify https://kubernetes.default.svc:443'
+                sh 'oc new-project test-testuser || true'
             }
         }
     }
