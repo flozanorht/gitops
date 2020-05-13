@@ -2,6 +2,9 @@ pipeline {
     triggers {
         pollSCM ('H/5 * * * *')
     }
+    options {
+        buildDiscarder (logRotator (numToKeepStr: '10', artifactNumToKeepStr: '10'))
+    }
     agent {
       node {
         label 'nodejs'
