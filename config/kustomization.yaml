@@ -1,5 +1,7 @@
 resources:
 - oauth.yaml
+- self-provisioners.yaml
+- project-leaders.yaml
 secretGenerator:
 - name: idp-localusers
   namespace: openshift-config
