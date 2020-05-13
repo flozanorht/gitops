@@ -1,4 +1,7 @@
 pipeline {
+    triggers {
+        cron('H/5 * * * *')
+    }
     agent {
       node {
         // try later defining a pod template using the base agent image or creating an is for the base agent image
@@ -17,7 +20,9 @@ pipeline {
         }
         stage ('Trigger the apply pipeline') {
             steps {
-                build job: 'apply', wait: true
+                // could force the master branch of a multibranch pipeline
+                //build job: 'apply/master'
+                build job: 'apply'
             }
         }
     }
