@@ -27,7 +27,7 @@ pipeline {
             archiveArtifacts artifacts: '*.txt'
             sh 'mkdir html'
             sh 'echo \'<h1>Drift Report<h1>\' > html/index.html'
-            sh 'echo \'<p><a href="drift-report.html">Resources</a></p>\' >> html/index.html'
+            sh 'echo \'<p><a href="drift-report.html">Resource changes</a></p>\' >> html/index.html'
             sh 'echo \'<p><a href="drift-report-users.html">HTPasswd user changes</a></p>\' >> html/index.html'
             sh 'cat drift-report.txt | ./diff2html.sh > html/drift-report.html' 
             sh 'cat drift-report-users.txt | ./diff2html.sh > html/drift-report-users.html' 
