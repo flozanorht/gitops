@@ -40,9 +40,15 @@ pipeline {
             build job: 'apply/master'
         }
         success {
-            sh 'echo \'<h1>There is no configuration drift<h1>\' > html/index.html'
-            archiveArtifacts artifacts: '*.html'
             archiveArtifacts artifacts: '*.txt'
+            sh 'echo \'<h1>There is no configuration drift<h1>\' > html/index.html'
+            publishHTML (target: [
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'html',
+                reportFiles: 'index.html',
+                reportName: "Drift Report"
+                ])
         }
     }
 }
