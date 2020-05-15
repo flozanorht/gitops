@@ -18,6 +18,7 @@ pipeline {
                 sh 'oc diff -k config | tee drift-report.txt'
                 // forces a failure if there is no drift
                 sh 'test -s drift-report.txt'
+                sh 'oc extract secret/idp-localusers -n openshift-config --to - | diff - config/idp-localusers-data | tee drift-report-users.txt'
                 archiveArtifacts artifacts: '*.txt' 
             }
         }
