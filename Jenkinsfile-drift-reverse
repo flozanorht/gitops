@@ -23,9 +23,9 @@ pipeline {
     }
     post {
         failure {
-            sh 'oc extract secret/idp-localusers -n openshift-config --to - | diff - config/idp-localusers-data | tee drift-report-users.txt'
+            //sh 'oc extract secret/idp-localusers -n openshift-config --to - | diff - config/idp-localusers-data | tee drift-report-users.txt'
             sh 'cat drift-report.txt | ./diff2html.sh > drift-report.html' 
-            sh 'cat drift-report-users.txt | ./diff2html.sh >> drift-report.html' 
+            //sh 'cat drift-report-users.txt | ./diff2html.sh >> drift-report.html' 
             archiveArtifacts artifacts: '*.html'
             build job: 'apply/master'
         }
