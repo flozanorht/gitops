@@ -41,6 +41,8 @@ pipeline {
             build job: 'apply/master'
         }
         success {
+            sh 'rm drift-report.txt'
+            sh 'echo \'There is no configuration drift\' > no-drift.txt'
             archiveArtifacts artifacts: '*.txt'
             sh 'mkdir html'
             sh 'echo \'<h1>There is no configuration drift<h1>\' > html/index.html'
