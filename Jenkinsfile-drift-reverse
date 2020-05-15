@@ -25,8 +25,9 @@ pipeline {
         failure {
             sh 'oc extract secret/idp-localusers -n openshift-config --to - | diff - config/idp-localusers-data | tee drift-report-users.txt'
             archiveArtifacts artifacts: '*.txt'
+            //XXX saving the html diff as artifact or usig the html publish plugin does not show the styles.
             sh 'mkdir html'
-            sh 'echo \'<h1>Drift Report<h1>\' > html/index.html'
+            //sh 'echo \'<h1>Drift Report<h1>\' > html/index.html'
             sh 'echo \'<p><a href="drift-report.html">Resource changes</a></p>\' >> html/index.html'
             sh 'echo \'<p><a href="drift-report-users.html">HTPasswd user changes</a></p>\' >> html/index.html'
             sh 'cat drift-report.txt | ./diff2html.sh > html/drift-report.html' 
@@ -35,7 +36,7 @@ pipeline {
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
                 reportDir: 'html',
-                reportFiles: 'index.html',
+                reportFiles: 'drift-report.html,drift-report-users.html',
                 reportName: "Drift Report"
                 ])
             build job: 'apply/master'
@@ -45,12 +46,12 @@ pipeline {
             sh 'echo \'There is no configuration drift\' > no-drift.txt'
             archiveArtifacts artifacts: '*.txt'
             sh 'mkdir html'
-            sh 'echo \'<h1>There is no configuration drift<h1>\' > html/index.html'
+            sh 'echo \'<h1>There is no configuration drift<h1>\' > html/no-drift.html'
             publishHTML (target: [
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
                 reportDir: 'html',
-                reportFiles: 'index.html',
+                reportFiles: 'no-drift.html',
                 reportName: "Drift Report"
                 ])
         }
