@@ -15,6 +15,7 @@ pipeline {
         stage ('Validate resources') {
             steps {
                 script {
+                    openshift.verbose()
                     openshift.withCluster () {
                         //XXX will require openshift.raw() to use apply with kustomize?
                         openshift.apply ('--dry-run -k config')
@@ -29,6 +30,7 @@ pipeline {
             steps {
                 sh 'awk -F: \'{ print $1 }\' config/idp-localusers-data'
                 script {
+                    openshift.verbose()
                     openshift.withCluster () {
                         //XXX will require openshift.raw() to use apply with kustomize?
                         openshift.apply ('--dry-run -k config')
