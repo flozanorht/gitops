@@ -52,8 +52,11 @@ pipeline {
             steps {
                 script {
                     openshift.withCluster () {
+                        //XXX it looks like openshift.withCredentials requires a token, cannot use login/password
+                        //XXX getting same "error: You must be logged in to the server (Unauthorized)" with both users
                         // User 'fernando' is allowed to create projects
                         openshift.withCredentials ('ocp_fernando') {
+                        // User 'testuser' should not be allowed to create projects
                         //openshift.withCredentials ('ocp_testuser') {
                             try {
                                 openshift.newProject ('test-testuser')
@@ -65,6 +68,8 @@ pipeline {
                         }
                     }
                 }
+                //XXX It looks like we have to do this to test the user-canot-create-project requirement
+                //XXX maybe I can try 'oc can-i' command with raw? Got no way to make it work
                 //sh 'oc login -u testuser -p redhat123 --insecure-skip-tls-verify https://kubernetes.default.svc:443'
                 //sh 'oc new-project test-testuser || true'
             }
