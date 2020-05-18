@@ -4,7 +4,7 @@ pipeline {
     }
     options {
         buildDiscarder (logRotator (numToKeepStr: '10', artifactNumToKeepStr: '10'))
-        disableConcurrentBuilds()
+        disableConcurrentBuilds ()
     }
     agent {
       node {
@@ -15,14 +15,14 @@ pipeline {
         stage ('Validate resources') {
             steps {
                 script {
+                    // Will these settings stay on for the next stage?
+                    openshift.verbose ()
+                    openshift.logLevel (1)
                     openshift.withCluster () {
-                        //XXX had to add this one even though I do not need to set a current project
+                        // Have to add this one even though I do not need to set a current project
+                        // because the OpenShift client plugin wants to return the state of all resources affected and not affected
+                        // If you need resources from different projects, you'll need multiple withProject blocks
                         openshift.withProject ('openshift-config') {
-                            openshift.verbose()
-                            openshift.logLevel(1)
-                            //XXX will require openshift.raw() to use apply with kustomize?
-                            //XXX It looks like the way the client plugin wants to build a result selector it needs to be inside the correct namespace
-                            //XXX Maybe it simply cannot handle non-namespaced resources?
                             openshift.apply ('--dry-run -k config')
                         }
                     }
@@ -38,9 +38,8 @@ pipeline {
                 script {
                     openshift.withCluster () {
                         openshift.withProject ('openshift-config') {
-                            openshift.verbose()
-                            openshift.logLevel(1)
-                            //XXX will require openshift.raw() to use apply with kustomize?
+                            //openshift.verbose ()
+                            //openshift.logLevel (1)
                             openshift.apply ('--dry-run -k config')
                         }
                     }
@@ -52,7 +51,7 @@ pipeline {
                 branch 'master'
             }
             steps {
-                //XXX Rewrite using the DSL?
+                //XXX Rewrite using the DSL? Cannot image a good way to do these
                 sh 'oc login -u testuser -p redhat123 --insecure-skip-tls-verify https://kubernetes.default.svc:443'
                 sh 'oc new-project test-testuser || true'
             }
