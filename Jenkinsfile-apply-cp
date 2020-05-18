@@ -52,10 +52,11 @@ pipeline {
             steps {
                 script {
                     openshift.withCluster () {
-                        openshift.withCredentials () {
+                        // Docs say this has to be a token, not username/password :-(
+                        openshift.withCredentials ('testuser', 'redhat123') {
                             try {
                                 openshift.newProject ('test-testuser')
-                                sh 'fail'
+                                sh 'false'
                             }
                             catch (e) {
                                 // Ignore errors, it is expected to fail
