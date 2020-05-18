@@ -15,13 +15,14 @@ pipeline {
         stage ('Validate resources') {
             steps {
                 script {
-                    // Will these settings stay on for the next stage?
+                    // These settings are preserved between stages
                     openshift.verbose ()
                     openshift.logLevel (1)
                     openshift.withCluster () {
-                        // Have to add this one even though I do not need to set a current project
+                        // Have to enter a project with the DSL even though these resources does not depend on a current project
                         // because the OpenShift client plugin wants to return the state of all resources affected and not affected
-                        // If you need resources from different projects, you'll need multiple withProject blocks
+                        // and assumes these resources are inside the current project
+                        // If you need resources from different projects, you will need multiple withProject blocks
                         openshift.withProject ('openshift-config') {
                             openshift.apply ('--dry-run -k config')
                         }
@@ -38,8 +39,6 @@ pipeline {
                 script {
                     openshift.withCluster () {
                         openshift.withProject ('openshift-config') {
-                            //openshift.verbose ()
-                            //openshift.logLevel (1)
                             openshift.apply ('--dry-run -k config')
                         }
                     }
@@ -51,9 +50,21 @@ pipeline {
                 branch 'master'
             }
             steps {
-                //XXX Rewrite using the DSL? Cannot image a good way to do these
-                sh 'oc login -u testuser -p redhat123 --insecure-skip-tls-verify https://kubernetes.default.svc:443'
-                sh 'oc new-project test-testuser || true'
+                script {
+                    openshift.withCluster () {
+                        openshift.withCredentials () {
+                            try {
+                                openshift.newProject ('test-testuser')
+                                sh 'fail'
+                            }
+                            catch (e) {
+                                // Ignore errors, it is expected to fail
+                            }
+                        }
+                    }
+                }
+                //sh 'oc login -u testuser -p redhat123 --insecure-skip-tls-verify https://kubernetes.default.svc:443'
+                //sh 'oc new-project test-testuser || true'
             }
         }
     }
