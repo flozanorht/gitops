@@ -53,7 +53,7 @@ pipeline {
                 script {
                     openshift.withCluster () {
                         // Docs say this has to be a token, not username/password :-(
-                        openshift.withCredentials ('testuser', 'redhat123') {
+                        openshift.withCredentials ('ocp_testuser') {
                             try {
                                 openshift.newProject ('test-testuser')
                                 sh 'false'
