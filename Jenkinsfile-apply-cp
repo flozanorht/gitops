@@ -52,8 +52,9 @@ pipeline {
             steps {
                 script {
                     openshift.withCluster () {
-                        // Docs say this has to be a token, not username/password :-(
-                        openshift.withCredentials ('ocp_testuser') {
+                        // User 'fernando' is allowed to create projects
+                        openshift.withCredentials ('ocp_fernando') {
+                        //openshift.withCredentials ('ocp_testuser') {
                             try {
                                 openshift.newProject ('test-testuser')
                                 sh 'false'
