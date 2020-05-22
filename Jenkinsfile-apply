@@ -14,6 +14,11 @@ pipeline {
     stages {
         stage ('Validate resources') {
             steps {
+                sh 'cat /etc/redhat-release || true'
+                sh 'which podman || true'
+                sh 'which skopeo || true'
+                sh 'which oc || true'
+                sh 'yum search skopeo || true'
                 sh 'oc apply --dry-run -k config'
             }
         }
