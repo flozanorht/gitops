@@ -1,0 +1,54 @@
+pipeline {
+    environment {
+        TMPL='nodejs-mongodb-example'
+        PRJ="test-${env.BRANCH_NAME}-${env.$BUILD_NUMBER}"
+        APP='nodeapp'
+    }
+    agent {
+      node {
+        label 'nodejs'
+      }
+    }
+    stages {
+        stage('create') {
+            steps {
+                script {
+                    openshift.withCluster() {
+                        openshift.newProject("${env.PRJ}")
+                        openshift.withProject("${env.PRJ}") {
+                            openshift.newApp("${env.TMPL}", "-p NAME=${env.APP}")
+                        }
+                    }
+                }
+            }
+        }
+        stage('build') {
+            steps {
+                script {
+                    openshift.withCluster() {
+                        openshift.withProject("${env.PRJ}") {
+                            def bc = openshift.selector('bc', "${env.APP}")
+                            def builds = bc.related('builds').untilEach(1) {
+                                return (it.object().status.phase == "Complete")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        stage('deploy') {
+            steps {
+                script {
+                    openshift.withCluster() {
+                        openshift.withProject("${env.PRJ}") {
+                            openshift.selector('dc', "${env.APP}").rollout().status()
+                            openshift.selector('dc', "${env.APP}").related('pods').untilEach(1) {
+                                return (it.object().status.phase == "Running")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
