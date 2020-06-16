@@ -1,3 +1,6 @@
+
+// OUTDATED NON-TESTED
+
 pipeline {
     environment {
         TMPL='nodejs-mongodb-example'
@@ -16,7 +19,7 @@ pipeline {
                     openshift.withCluster() {
                         openshift.newProject("${env.PRJ}")
                         openshift.withProject("${env.PRJ}") {
-                            openshift.newApp("${env.TMPL}", "-p NAME=${env.APP}")
+                            openshift.newApp("${env.TMPL}", "-p NAME=${env.APP}", "-l app=${env.APP}")
                         }
                     }
                 }
@@ -45,6 +48,18 @@ pipeline {
                             openshift.selector('dc', "${env.APP}").related('pods').untilEach(1) {
                                 return (it.object().status.phase == "Running")
                             }
+                        }
+                    }
+                }
+            }
+        }
+        stage('test') {
+            steps {
+                script {
+                    openshift.withCluster() {
+                        openshift.withProject("${env.PRJ}") {
+                            def host = openshift.selector('route', "${env.APP}").object.host
+                            sh ("curl --fail ${host}/pagecount")
                         }
                     }
                 }
